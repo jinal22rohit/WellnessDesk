@@ -8,7 +8,7 @@ const getRevenueAnalytics = async (req, res) => {
       { $match: { status: "completed" } },
       { $lookup: { from: "therapies", localField: "therapyId", foreignField: "_id", as: "therapy" } },
       { $unwind: "$therapy" },
-      { $group: { _id: null, total: { $sum: "$therapy.price" } } },
+      { $group: { _id: null, total: { $sum: "$therapy.therapyprice" } } },
     ]);
 
     // 2. Revenue by therapy
@@ -16,35 +16,42 @@ const getRevenueAnalytics = async (req, res) => {
       { $match: { status: "completed" } },
       { $lookup: { from: "therapies", localField: "therapyId", foreignField: "_id", as: "therapy" } },
       { $unwind: "$therapy" },
-      { $group: { _id: "$therapy.therapyName", revenue: { $sum: "$therapy.price" }, count: { $sum: 1 } } },
+      { $group: { _id: "$therapy.therapyName", revenue:{ $sum: "$therapy.therapyprice" }, count: { $sum: 1 } } },
       { $sort: { revenue: -1 } },
     ]);
 
     // 3. Revenue by employee
-    const revenueByEmployee = await Booking.aggregate([
-      { $match: { status: "completed" } },
-      { $lookup: { from: "therapies", localField: "therapyId", foreignField: "_id", as: "therapy" } },
-      { $unwind: "$therapy" },
-      { $lookup: { from: "employees", localField: "empID", foreignField: "_id", as: "employee" } },
-      { $unwind: "$employee" },
-      { $group: { _id: "$employee.name", revenue: { $sum: "$therapy.price" }, count: { $sum: 1 } } },
-      { $sort: { revenue: -1 } },
-    ]);
+ const revenueByEmployee = await Booking.aggregate([
+  { $match: { status: "completed" } },
+  { $lookup: { from: "therapies", localField: "therapyId", foreignField: "_id", as: "therapy" } },
+  { $unwind: "$therapy" },
+  { $lookup: { from: "employees", localField: "empID", foreignField: "_id", as: "employee" } },
+  { $unwind: { path: "$employee", preserveNullAndEmptyArrays: true } },
+  {
+    $group: {
+      _id: "$employee.empName",
+      revenue: { $sum: "$therapy.therapyprice" },
+      count: { $sum: 1 },
+    },
+  },
+  { $match: { _id: { $ne: null } } },
+  { $sort: { revenue: -1 } },
+]);
 
     // 4. Monthly revenue
-    const monthlyRevenue = await Booking.aggregate([
-      { $match: { status: "completed" } },
-      { $lookup: { from: "therapies", localField: "therapyId", foreignField: "_id", as: "therapy" } },
-      { $unwind: "$therapy" },
-      {
-        $group: {
-          _id: { year: { $year: "$date" }, month: { $month: "$date" } },
-          revenue: { $sum: "$therapy.price" },
-          count: { $sum: 1 },
-        },
-      },
-      { $sort: { "_id.year": 1, "_id.month": 1 } },
-    ]);
+  const monthlyRevenue = await Booking.aggregate([
+  { $match: { status: "completed" } },
+  { $lookup: { from: "therapies", localField: "therapyId", foreignField: "_id", as: "therapy" } },
+  { $unwind: "$therapy" },
+  {
+    $group: {
+      _id: { year: { $year: "$date" }, month: { $month: "$date" } },
+      revenue: { $sum: "$therapy.therapyprice" },
+      count: { $sum: 1 },
+    },
+  },
+  { $sort: { "_id.year": 1, "_id.month": 1 } },
+]);
 
     // 5. Booking status summary
     const statusSummary = await Booking.aggregate([

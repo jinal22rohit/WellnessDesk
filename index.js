@@ -8,7 +8,7 @@ const userroutes = require('./src/routes/userRoutes');
 //import dbconnect here
 const dbconnect = require("./src/config/dbconnect");
 dbconnect();
-require("./src/utils/autoCorn"); // auto-complete past bookings
+// require("./src/utils/autoCorn"); // auto-complete past bookings
 
 const path = require("path");
 const app = express();

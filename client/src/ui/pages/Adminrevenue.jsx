@@ -52,25 +52,42 @@ export function AdminRevenueDashboard() {
       </div>
 
       {/* Monthly revenue bar chart */}
-      <div className="mt-8 rounded-xl border bg-white p-6">
-        <h2 className="text-lg font-semibold text-slate-800 mb-4">Monthly Revenue</h2>
-        <div className="flex items-end gap-2 h-40">
-          {data.monthlyRevenue.map((m) => (
-            <div key={`${m._id.year}-${m._id.month}`} className="flex flex-col items-center flex-1">
-              <span className="text-xs text-slate-500 mb-1">₹{m.revenue}</span>
-              <div
-                className="w-full bg-emerald-500 rounded-t"
-                style={{ height: `${(m.revenue / maxMonthly) * 120}px` }}
-              />
-              <span className="text-xs text-slate-400 mt-1">{MONTHS[m._id.month - 1]}</span>
-            </div>
-          ))}
-          {data.monthlyRevenue.length === 0 && (
-            <p className="text-sm text-slate-400">No completed bookings yet.</p>
-          )}
+   
+<div className="mt-8 rounded-xl border bg-white p-6">
+  <h2 className="text-lg font-semibold text-slate-800 mb-6">Monthly Revenue</h2>
+  <div className="flex flex-col gap-5">
+    {data.monthlyRevenue.map((m) => (
+      <div key={`${m._id.year}-${m._id.month}`}>
+        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "6px" }}>
+          <span style={{ fontSize: "13px", fontWeight: "500", color: "var(--color-text-primary)" }}>
+            {MONTHS[m._id.month - 1]} {m._id.year}
+          </span>
+          <span style={{ fontSize: "13px", color: "var(--color-text-secondary)" }}>
+            ₹{m.revenue} · {m.count} sessions
+          </span>
+        </div>
+        <div style={{ position: "relative", width: "100%", background: "var(--color-background-secondary)", borderRadius: "6px", height: "22px" }}>
+          <div style={{
+            width: `${Math.max(4, (m.revenue / maxMonthly) * 100)}%`,
+            height: "22px",
+            background: "#1D9E75",
+            borderRadius: "6px",
+            display: "flex",
+            alignItems: "center",
+            paddingLeft: "8px",
+          }}>
+            <span style={{ fontSize: "12px", color: "#fff", whiteSpace: "nowrap" }}>
+              ₹{m.revenue}
+            </span>
+          </div>
         </div>
       </div>
-
+    ))}
+    {data.monthlyRevenue.length === 0 && (
+      <p style={{ fontSize: "13px", color: "var(--color-text-secondary)" }}>No completed bookings yet.</p>
+    )}
+  </div>
+</div>
       {/* Revenue by therapy */}
       <div className="mt-6 rounded-xl border bg-white p-6">
         <h2 className="text-lg font-semibold text-slate-800 mb-4">Revenue by Therapy</h2>
@@ -100,19 +117,21 @@ export function AdminRevenueDashboard() {
         <h2 className="text-lg font-semibold text-slate-800 mb-4">Revenue by Employee</h2>
         <div className="grid gap-3">
           {data.revenueByEmployee.map((e) => (
-            <div key={e._id}>
-              <div className="flex justify-between text-sm text-slate-700 mb-1">
-                <span>{e._id}</span>
-                <span>₹{e.revenue} ({e.count} sessions)</span>
-              </div>
-              <div className="w-full bg-slate-100 rounded-full h-2">
-                <div
-                  className="bg-purple-500 h-2 rounded-full"
-                  style={{ width: `${(e.revenue / maxEmp) * 100}%` }}
-                />
-              </div>
-            </div>
-          ))}
+  <div key={e._id}>
+    <div style={{ display: "flex", justifyContent: "space-between", fontSize: "13px", color: "var(--color-text-primary)", marginBottom: "6px" }}>
+      <span style={{ fontWeight: "500" }}>{e._id || "Unknown employee"}</span>
+      <span style={{ color: "var(--color-text-secondary)" }}>₹{e.revenue} ({e.count} sessions)</span>
+    </div>
+    <div style={{ width: "100%", background: "var(--color-background-secondary)", borderRadius: "6px", height: "20px" }}>
+      <div style={{
+        width: `${Math.max(2, (e.revenue / maxEmp) * 100)}%`,
+        height: "20px",
+        background: "#7F77DD",
+        borderRadius: "6px",
+      }}/>
+    </div>
+  </div>
+))}
           {data.revenueByEmployee.length === 0 && (
             <p className="text-sm text-slate-400">No data yet.</p>
           )}
