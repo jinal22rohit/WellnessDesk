@@ -59,9 +59,10 @@ async function sendOtp(req, res) {
     }
 
     const otp = genOtp6();
-    user.otp = otp;
-    user.otpExpiry = new Date(Date.now() + OTP_EXPIRY_MS);
-    await user.save();
+    await User.updateOne(
+  { _id: user._id },
+  { otp, otpExpiry: new Date(Date.now() + OTP_EXPIRY_MS) }
+);
 
     // Send OTP (console log for debugging + email for user)
     const channel = hasEmail ? "email" : "sms";
@@ -154,10 +155,10 @@ async function resetEmployeePassword(req, res) {
     }
 
     const hashed = await bcrypt.hash(newPassword, 10);
-    user.password = hashed;
-    user.otp = null;
-    user.otpExpiry = null;
-    await user.save();
+      await User.updateOne(
+  { _id: user._id },
+  { password: hashed, otp: null, otpExpiry: null }
+);
 
     return res.json({ success: 1, message: "Password reset successful" });
   } catch (err) {

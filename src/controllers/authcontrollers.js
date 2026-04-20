@@ -52,7 +52,7 @@ const selectedRole =
   : role;
 
 if (!selectedRole) {
-    return res.status(400).json({ message: "Role is required" });
+    return res.status(400).json({message:"Role is required" });
 }
 
 const identifier = typeof username === "string" ? username.trim() : "";

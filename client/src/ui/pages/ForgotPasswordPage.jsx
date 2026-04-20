@@ -110,7 +110,7 @@ export function ForgotPasswordPage() {
         {step === 1 ? (
           <form onSubmit={onSendOtp} className="mt-6 grid gap-4">
             <div>
-              <label className="text-sm font-medium text-slate-700">Email (optional)</label>
+              <label className="text-sm font-medium text-slate-700">Email</label>
               <input
                 type="email"
                 value={email}
@@ -119,16 +119,7 @@ export function ForgotPasswordPage() {
                 className="mt-1 w-full rounded-lg border px-3 py-2"
               />
             </div>
-            <div>
-              <label className="text-sm font-medium text-slate-700">Phone (optional)</label>
-              <input
-                type="text"
-                value={phoneNumber}
-                onChange={(e) => setPhoneNumber(e.target.value)}
-                placeholder="e.g. 9876543210"
-                className="mt-1 w-full rounded-lg border px-3 py-2"
-              />
-            </div>
+           
 
             <button
               disabled={loading || !canSubmitIdentifier}

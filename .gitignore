@@ -4,7 +4,7 @@ client/node_modules
 .env
 dist
 build
-
+src/uploads/
 # Logs
 logs
 *.log
