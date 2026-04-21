@@ -16,8 +16,22 @@ const app = express();
 app.use("/uploads", express.static(path.join(__dirname, "src", "uploads")));
 
 //middleware
+
+const allowedOrigins = [
+  "https://wellnessdesk.vercel.app",
+  "https://wellnessdesk-9326qqtoi-jills.vercel.app"
+];
+
 app.use(cors({
-  origin: "https://wellnessdesk.vercel.app" // your vercel URL
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS: " + origin));
+    }
+  },
+  credentials: true
 }));
 app.use(express.json());
 
