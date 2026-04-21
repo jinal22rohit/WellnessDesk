@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Container } from "../shared/Container";
 import { registerApi } from "../services/auth";
 
+
 export function RegisterPage() {
   const [form, setForm] = useState({
     username: "",

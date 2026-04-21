@@ -6,6 +6,7 @@ import { findEmployeesByTherapy } from "../services/employee";
 import { createBooking, getSlots } from "../services/booking";
 import { SlotSelector } from "../components/SlotSelector";
 import { useAuth } from "../context/AuthContext";
+const API_URL = import.meta.env.VITE_API_URL;
 
 function yyyyMmDd(d) {
   const x = new Date(d);

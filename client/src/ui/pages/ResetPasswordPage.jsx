@@ -1,6 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Container } from "../shared/Container";
+const API_URL = import.meta.env.VITE_API_URL;
+
 
 export function ResetPasswordPage() {
   return (

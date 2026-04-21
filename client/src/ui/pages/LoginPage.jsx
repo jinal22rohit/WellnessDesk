@@ -4,7 +4,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Container } from "../shared/Container";
 import { loginApi } from "../services/auth";
 import { useAuth } from "../context/AuthContext";
-
+const API_URL = import.meta.env.VITE_API_URL;
 
 
 export function LoginPage() {
