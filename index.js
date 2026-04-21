@@ -20,8 +20,8 @@ app.use(cors());
 app.use(express.json());
 
 //testing
-app.get("/test", (req, res) => {
-  res.send("Test route working");
+app.get("/", (req, res) => {
+  res.send("WellnessDesk API is running 🚀");
 });
 
 
