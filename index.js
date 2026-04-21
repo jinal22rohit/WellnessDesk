@@ -19,6 +19,12 @@ app.use("/uploads", express.static(path.join(__dirname, "src", "uploads")));
 app.use(cors());
 app.use(express.json());
 
+//testing
+app.get("/test", (req, res) => {
+  res.send("Test route working");
+});
+
+
 //ROUTES for authentication
 app.use("/api/auth",authRoutes);
 
