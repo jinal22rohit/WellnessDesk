@@ -17,7 +17,7 @@ app.use("/uploads", express.static(path.join(__dirname, "src", "uploads")));
 
 //middleware
 app.use(cors({
-  origin: "https://wellness-desk.vercel.app" // your vercel URL
+  origin: "https://wellnessdesk.vercel.app" // your vercel URL
 }));
 app.use(express.json());
 
