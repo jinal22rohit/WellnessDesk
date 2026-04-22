@@ -1,20 +1,21 @@
+const cloudinary = require("cloudinary").v2;
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const multer = require("multer");
-const path = require("path");
 
-// storage location
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    // Absolute uploads dir so server cwd changes don't break saving files
-    cb(null, path.join(__dirname, "..", "uploads"));
-  },
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
-  filename: function (req, file, cb) {
-    // Preserve original extension so Express serves the correct Content-Type.
-    const ext = path.extname(file.originalname || "").toLowerCase();
-    cb(null, `${Date.now()}${ext || ".jpg"}`);
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "wellnessdesk",
+    allowed_formats: ["jpg", "jpeg", "png", "webp"],
   },
 });
 
 const upload = multer({ storage: storage });
 
-module.exports = upload;  
+module.exports = upload;

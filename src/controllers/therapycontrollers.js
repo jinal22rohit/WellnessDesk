@@ -6,7 +6,7 @@ const createTherapy = async (req,res)=>{
         // Build an absolute URL that works behind proxies (ngrok, reverse proxy, etc.)
         const proto = (req.headers["x-forwarded-proto"] || req.protocol);
         const host = (req.headers["x-forwarded-host"] || req.get("host"));
-        const baseUrl = `${proto}://${host}`;
+        const baseUrl = process.env.BASE_URL || "http://localhost:7002";
         const therapyImage = req.file?.filename ? `${baseUrl}/uploads/${req.file.filename}` : undefined;
 
         const durationNum = req.body?.duration != null ? Number(req.body.duration) : undefined;
