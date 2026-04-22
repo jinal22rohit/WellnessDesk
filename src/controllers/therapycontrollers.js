@@ -3,11 +3,7 @@ const Therapy_ = require('../models/therapymodel');
 // create therapy 
 const createTherapy = async (req,res)=>{
     try{
-        // Build an absolute URL that works behind proxies (ngrok, reverse proxy, etc.)
-        const proto = (req.headers["x-forwarded-proto"] || req.protocol);
-        const host = (req.headers["x-forwarded-host"] || req.get("host"));
-        const baseUrl = process.env.BASE_URL || "http://localhost:7002";
-        const therapyImage = req.file?.filename ? `${baseUrl}/uploads/${req.file.filename}` : undefined;
+    const therapyImage = req.file?.path ? req.file.path : undefined;
 
         const durationNum = req.body?.duration != null ? Number(req.body.duration) : undefined;
         const priceNum = req.body?.therapyprice != null ? Number(req.body.therapyprice) : undefined;
@@ -91,13 +87,7 @@ const parameters_Therapies = async (req,res)=>{
 
 const updatetherapy = async (req,res)=>{
 try{
-  // Build an absolute URL that works behind proxies (ngrok, reverse proxy, etc.)
-  const proto = (req.headers["x-forwarded-proto"] || req.protocol);
-  const host = (req.headers["x-forwarded-host"] || req.get("host"));
-  const baseUrl = `${proto}://${host}`;
-  
-  // Handle image upload if a new file is provided
-  const therapyImage = req.file?.filename ? `${baseUrl}/uploads/${req.file.filename}` : undefined;
+ const therapyImage = req.file?.path ? req.file.path : undefined;
   
   // Prepare update data
   const updateData = { ...req.body };
