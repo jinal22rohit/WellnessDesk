@@ -17,25 +17,6 @@ function toImageSrc(value) {
   return `${baseUrl}/${value}`;
 }
 
-  
-
-  // If backend stored an absolute URL with the wrong host/port, rebuild it from the uploads part.
-  const uploadsIdx = value.indexOf("/uploads/");
-  if (uploadsIdx !== -1) {
-    const filename = value.slice(uploadsIdx + "/uploads/".length);
-    return `${baseUrl}/uploads/${filename}`;
-  }
-  const therapyImgIdx = value.indexOf("/therapyImage/");
-  if (therapyImgIdx !== -1) {
-    const filename = value.slice(therapyImgIdx + "/therapyImage/".length);
-    return `${baseUrl}/uploads/${filename}`;
-  }
-
-  if (value.startsWith("/")) return `${baseUrl}${value}`;
-  if (value.startsWith("uploads/")) return `${baseUrl}/${value}`;
-  return `${baseUrl}/${value}`;
-}
-
 export function TherapyCard({ therapy }) {
   const therapyImageSrc = toImageSrc(therapy?.therapyImage);
   return (
@@ -69,4 +50,3 @@ export function TherapyCard({ therapy }) {
     </Link>
   );
 }
-
