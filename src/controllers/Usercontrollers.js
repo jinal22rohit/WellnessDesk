@@ -92,12 +92,9 @@ const updateMyProfile = async (req, res) => {
     if (typeof req.body?.phoneNumber === "string") patch.phoneNumber = req.body.phoneNumber.trim();
     if (typeof req.body?.dob === "string") patch.dob = req.body.dob;
     
-    // Handle profile image upload
-    if (req.file?.filename) {
-      const proto = (req.headers["x-forwarded-proto"] || req.protocol);
-      const host = (req.headers["x-forwarded-host"] || req.get("host"));
-      patch.profileImage = `${proto}://${host}/uploads/${req.file.filename}`;
-    }
+    if (req.file?.path) {
+  patch.profileImage = req.file.path;
+}
     
     if (!Object.keys(patch).length) {
       return res.status(400).json({ success: 0, message: "No valid fields provided" });
