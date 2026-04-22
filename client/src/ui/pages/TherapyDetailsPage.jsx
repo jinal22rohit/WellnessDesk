@@ -7,21 +7,13 @@ import { api } from "../services/api";
 function toImageSrc(value) {
   if (!value) return "";
   if (typeof value !== "string") return "";
+
+  if (value.startsWith("http://") || value.startsWith("https://")) {
+    return value;
+  }
+
   const baseUrl = api.defaults.baseURL || "http://localhost:7002";
-
-  const uploadsIdx = value.indexOf("/uploads/");
-  if (uploadsIdx !== -1) {
-    const filename = value.slice(uploadsIdx + "/uploads/".length);
-    return `${baseUrl}/uploads/${filename}`;
-  }
-  const therapyImgIdx = value.indexOf("/therapyImage/");
-  if (therapyImgIdx !== -1) {
-    const filename = value.slice(therapyImgIdx + "/therapyImage/".length);
-    return `${baseUrl}/uploads/${filename}`;
-  }
-
   if (value.startsWith("/")) return `${baseUrl}${value}`;
-  if (value.startsWith("uploads/")) return `${baseUrl}/${value}`;
   return `${baseUrl}/${value}`;
 }
 
@@ -89,4 +81,3 @@ export function TherapyDetailsPage() {
     </Container>
   );
 }
-
