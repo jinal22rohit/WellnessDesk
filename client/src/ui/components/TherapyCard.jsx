@@ -6,12 +6,10 @@ function toImageSrc(value) {
   if (!value) return "";
   if (typeof value !== "string") return "";
 
-  // If it's already an absolute URL (Cloudinary or any https), use it directly
   if (value.startsWith("http://") || value.startsWith("https://")) {
     return value;
   }
 
-  // Fallback for old relative paths
   const baseUrl = api.defaults.baseURL || "http://localhost:7002";
   if (value.startsWith("/")) return `${baseUrl}${value}`;
   return `${baseUrl}/${value}`;
