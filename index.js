@@ -25,11 +25,14 @@ const allowedOrigins = [
 app.use(cors({
   origin: function (origin, callback) {
     if (!origin) return callback(null, true);
-    if (allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS: " + origin));
+    // Allow production + any Vercel preview URL for this project
+    if (
+      origin === "https://wellnessdesk.vercel.app" ||
+      origin.endsWith(".vercel.app")
+    ) {
+      return callback(null, true);
     }
+    callback(new Error("Not allowed by CORS: " + origin));
   },
   credentials: true
 }));
