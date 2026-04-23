@@ -11,9 +11,7 @@ exports.createEmployee = async (req, res) => {
   try {
     const { username, email, password, phno, empName, dob, therapyId } = req.body;
 
-    const proto = (req.headers["x-forwarded-proto"] || req.protocol);
-    const host = (req.headers["x-forwarded-host"] || req.get("host"));
-    const baseUrl = `${proto}://${host}`;
+  
 
     const hashedpassword = await bcrypt.hash(password, 10);
 
@@ -30,9 +28,7 @@ exports.createEmployee = async (req, res) => {
     const emp = await Employee.create({
       therapyId,
       empName,
-      empImg: req.file?.filename
-        ? `${baseUrl}/uploads/${req.file.filename}`
-        : undefined,
+      empImg: req.file?.path ? req.file.path : undefined,
       dob,
       userId: user._id
     });
@@ -106,18 +102,17 @@ exports.updateEmployee = async (req, res) => {
   try {
     const { empName, dob, therapyId, email, phoneNumber, password } = req.body;
 
-    const proto = req.headers["x-forwarded-proto"] || req.protocol;
-    const host = req.headers["x-forwarded-host"] || req.get("host");
-    const baseUrl = `${proto}://${host}`;
+    
+  
 
     const employee = await Employee.findById(req.params.id);
     if (!employee) return res.json({ success: 0, message: "Employee not found" });
 
     // ✅ build employee patch
     const empPatch = { empName, dob, therapyId };
-    if (req.file?.filename) {
-      empPatch.empImg = `${baseUrl}/uploads/${req.file.filename}`;
-    }
+     if (req.file?.path) {
+  empPatch.empImg = req.file.path;
+}
 
     await Employee.findByIdAndUpdate(req.params.id, empPatch);
 
@@ -231,6 +226,9 @@ exports.updateMyEmployeeProfile = async (req, res) => {
       empName: req.body.empName,
       dob: req.body.dob
     };
+    if (req.file?.path) {
+  patch.empImg = req.file.path;
+}
 
     await Employee.findByIdAndUpdate(user.employeeId, patch, { new: true });
 
